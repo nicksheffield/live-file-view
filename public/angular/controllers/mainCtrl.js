@@ -1,13 +1,11 @@
 angular.module('app.controllers')
 
-.controller('mainCtrl', function($scope, $http, $syntax, $timeout, $loader) {
+.controller('mainCtrl', function($scope, $http, $syntax, $timeout, $loader, $socket) {
 	$scope.pageTitle = 'Your MEAN website';
 	
 	$scope.currentFile = {}
 	$scope.fileContent = ''
 	$scope.syntax = ''
-	
-	window.scope = $scope
 
 	$scope.$watch('fileContent', function(newVal, oldVal) {
 		$timeout(function() {
@@ -21,6 +19,10 @@ angular.module('app.controllers')
 		})
 	
 	$scope.choose = function(file) {
+		get(file)
+	}
+	
+	function get(file) {
 		$http.post('/api/get_file', {path: file.path})
 			.success(function(data) {
 				$scope.currentFile = file
@@ -28,4 +30,19 @@ angular.module('app.controllers')
 				$scope.syntax = $syntax(file.name)
 			})
 	}
+	
+	$socket.on('connected', function() {
+		console.log('Connected!', $socket.obj.id)
+	})
+	
+	$socket.on('fschange', function(data) {
+		console.log('fschange', data)
+		
+		if($scope.currentFile.path == data.path) {
+			console.log('match')
+			get($scope.currentFile)
+		} else {
+			console.log('no match')
+		}
+	})
 });

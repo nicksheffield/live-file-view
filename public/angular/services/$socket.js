@@ -4,7 +4,7 @@ angular.module('app.services')
 	var socket = io.connect($config.socketURL);
 
 	var service = {
-		id: socket.id,
+		obj: socket,
 		on: function(eventName, callback) {
 			socket.on(eventName, function() {
 				var args = arguments;

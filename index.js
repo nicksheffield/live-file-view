@@ -12,7 +12,7 @@ watcher.start()
 watcher.on('change', function(path, info) {
 	console.log('fschange', path)
 
-	var simplePath = path.replace(__dirname, '')
+	var simplePath = '.' + path.replace(__dirname, '')
 	io.emit('fschange', {path: simplePath})
 })
 
@@ -65,8 +65,6 @@ io.on('connection', function(socket) {
 	console.log('a user connected', socket.id)
 
 	socket.emit('connected')
-
-	
 
 })
 

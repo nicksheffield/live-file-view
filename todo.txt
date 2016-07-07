@@ -1,6 +1,11 @@
 # Todo
 
+- Tab system
 - Fix binary files being requested
 - Add resizable and rememberable sidebar
-- Add realtime fsevent updates
 - Try other themes from https://github.com/PrismJS/prism-themes
+- Make images display when previewed
+- Turn into a node plugin
+
+# Done
+- Add realtime fsevent updates
