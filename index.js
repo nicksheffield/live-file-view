@@ -5,6 +5,7 @@ var io = require('socket.io')(http)
 var watcher = require('fsevents')('./site')
 var fs = require('fs')
 var _ = require('lodash')
+var bodyParser = require('body-parser')
 
 watcher.start()
 
@@ -16,11 +17,19 @@ watcher.on('change', function(path, info) {
 })
 
 app.use(express.static('./public/'))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+	extended: true
+}));
 
 app.get('/api/files', function(req, res) {
 	var files = findFiles({path: './site/'})
 	
 	res.send(files)
+})
+
+app.post('/api/get_file', function(req, res) {
+	res.send(fs.readFileSync(req.body.path, 'utf-8'))
 })
 
 function findFiles(folder) {
@@ -31,6 +40,10 @@ function findFiles(folder) {
 		var thing = {}
 		var stat = fs.lstatSync(folder.path + path)
 		var name = path + (stat.isDirectory() ? '/' : '')
+		
+		if(name == 'node_modules/') return
+		if(stat.isDirectory() && name[0] == '.') return
+		if(name == '.DS_Store') return
 		
 		thing.type = stat.isFile() ? 'file' : 'directory'
 		thing.path = folder.path + name

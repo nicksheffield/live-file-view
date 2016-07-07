@@ -1,7 +1,17 @@
-<h1>Folder viewer</h1>
+<div class="wrapper" layout="full-col">
+	<header>
+		<h1>Folder viewer</h1>
+	</header>
 
-<ul class="file-nav">
-	<li ng-repeat="file in files" ng-class="{file: file.type == 'file', directory: file.type == 'directory'}">
-		<file-nav-item data="file"></file-nav-item>
-	</li>
-</ul>
+	<div layout="row" ratio="1">
+		<ul class="file-nav">
+			<li ng-repeat="file in files" ng-class="{file: file.type == 'file', directory: file.type == 'directory'}">
+				<file-nav-item data="file" choose="choose"></file-nav-item>
+			</li>
+		</ul>
+		
+		<div class="content" ratio="1">
+			<pre>{{ fileContent }}</pre>
+		</div>
+	</div>
+</div>
