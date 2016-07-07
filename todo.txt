@@ -1,0 +1,6 @@
+# Todo
+
+- Fix binary files being requested
+- Add resizable and rememberable sidebar
+- Add realtime fsevent updates
+- Try other themes from https://github.com/PrismJS/prism-themes

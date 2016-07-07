@@ -97,7 +97,23 @@ gulp.task('libs', function() {
 		'public/components/angular-resource/angular-resource.min.js',
 		'public/components/angular-ui-router/release/angular-ui-router.min.js',
 		'public/components/angular-sanitize/angular-sanitize.min.js',
-		'public/components/lodash/lodash.min.js'
+		'public/components/lodash/lodash.min.js',
+		'public/components/prism/prism.js',
+		'public/components/prism/components/prism-markup.min.js',
+		'public/components/prism/components/prism-css.min.js',
+		'public/components/prism/components/prism-javascript.min.js',
+		'public/components/prism/components/prism-php.min.js',
+		'public/components/prism/components/prism-sql.min.js',
+		'public/components/prism/components/prism-markdown.min.js',
+		'public/components/prism/components/prism-stylus.min.js',
+		'public/components/prism/components/prism-sass.min.js',
+		'public/components/prism/components/prism-less.min.js',
+		'public/components/prism/components/prism-json.min.js',
+		'public/components/prism/components/prism-bash.min.js',
+		'public/components/prism/plugins/previewer-base/prism-previewer-base.min.js',
+		'public/components/prism/plugins/previewer-color/prism-previewer-color.min.js',
+		'public/components/prism/plugins/previewer-gradient/prism-previewer-gradient.min.js',
+		'public/components/prism/plugins/line-numbers/prism-line-numbers.min.js'
 	]
 
 	var stream = gulp.src(libs)                             // get all the lib files

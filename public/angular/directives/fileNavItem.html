@@ -1,6 +1,6 @@
 <div class="file-nav-item">
 	
-	<span class="name">
+	<span class="name" ng-class="{current: current.name == data.name}">
 		<span ng-show="data.type == 'directory'">
 			<span class="icon" ng-if="!open"><i class="fa fa-folder"></i></span>
 			<span class="icon" ng-if="open"><i class="fa fa-folder-open"></i></span>
@@ -12,8 +12,8 @@
 	</span>
 
 	<ul ng-show="data.type == 'directory' && open">
-		<li ng-repeat="file in data.files">
-			<file-nav-item data="file" choose="choose"></file-nav-item>
+		<li ng-repeat="file in data.files" ng-class="{file: file.type == 'file', directory: file.type == 'directory'}">
+			<file-nav-item data="file" choose="choose" current="current" />
 		</li>
 	</ul>
 </div>

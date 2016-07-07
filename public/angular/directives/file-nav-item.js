@@ -26,7 +26,8 @@ angular.module('app.directives')
 		},
 		scope: {
 			'data': '=',
-			'choose': '='
+			'choose': '=',
+			'current': '='
 		}
 	}
 })

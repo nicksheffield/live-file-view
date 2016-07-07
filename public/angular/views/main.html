@@ -1,17 +1,24 @@
 <div class="wrapper" layout="full-col">
-	<header>
-		<h1>Folder viewer</h1>
-	</header>
+
+	<div class="tabs">
+		<div class="tab" ng-repeat="file in loadedFiles">
+			<i class="fa fa-file"></i> {{ file.name }}
+		</div>
+	</div>
 
 	<div layout="row" ratio="1">
 		<ul class="file-nav">
 			<li ng-repeat="file in files" ng-class="{file: file.type == 'file', directory: file.type == 'directory'}">
-				<file-nav-item data="file" choose="choose"></file-nav-item>
+				<file-nav-item data="file" choose="choose" current="currentFile" />
 			</li>
 		</ul>
 		
-		<div class="content" ratio="1">
-			<pre class="language-{{ syntax }}"><code class="language-{{ syntax }}">{{ fileContent }}</code></pre>
+		<div class="content" ratio="1" layout="col">
+			<pre ratio="1" ng-show="syntax" class="{{ syntax }} line-numbers"><code class="{{ syntax }}" ng-bind="fileContent"></code></pre>
+			
+			<div ng-show="!syntax" layout="col" justify="center" align="center" ratio="1" class="no-file-chosen">
+				Please choose a file
+			</div>
 		</div>
 	</div>
 </div>

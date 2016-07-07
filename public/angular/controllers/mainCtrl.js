@@ -1,13 +1,16 @@
 angular.module('app.controllers')
 
-.controller('mainCtrl', function($scope, $http, $syntax, $timeout) {
+.controller('mainCtrl', function($scope, $http, $syntax, $timeout, $loader) {
 	$scope.pageTitle = 'Your MEAN website';
 	
+	$scope.currentFile = {}
 	$scope.fileContent = ''
 	$scope.syntax = ''
+	
+	window.scope = $scope
 
-	$scope.$watch('fileContents', function(newVal, oldVal) {
-		$timeout(function(){
+	$scope.$watch('fileContent', function(newVal, oldVal) {
+		$timeout(function() {
 			Prism.highlightAll()
 		}, 0)
 	})
@@ -20,8 +23,9 @@ angular.module('app.controllers')
 	$scope.choose = function(file) {
 		$http.post('/api/get_file', {path: file.path})
 			.success(function(data) {
+				$scope.currentFile = file
 				$scope.fileContent = data
-				$scope.syntax = $syntax(file.name) ? $syntax(file.name) : 'none'
+				$scope.syntax = $syntax(file.name)
 			})
 	}
 });
