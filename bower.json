@@ -1,0 +1,22 @@
+{
+  "name": "file-view",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Nick Sheffield <numbereft@gmail.com> (http://nicksheffield.me/)"
+  ],
+  "license": "MIT",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "flexy": "~0.0.8",
+    "jquery": "~3.0.0"
+  }
+}

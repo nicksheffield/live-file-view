@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+
+	<nav>
+		<ul id="nav"></ul>
+	</nav>
+
+	<script src="/components/jquery/dist/jquery.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		$(function() {
+			
+			$.get('/api/files').then(function(data) {
+				files = data
+				
+				files.forEach(function(file) {
+					$('#nav').append('<li>' + file.name +'</li>')
+				})
+			})
+			
+		})
+	</script>
+</body>
+</html>
