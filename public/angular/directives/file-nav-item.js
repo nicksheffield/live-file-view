@@ -3,8 +3,6 @@ angular.module('app.directives')
 .directive('fileNavItem', function($recursion) {
 	function link(scope, el, attrs){
 		scope.open = false
-
-		console.log('onclick', scope.choose)
 		
 		var div = el.find('.name')
 	

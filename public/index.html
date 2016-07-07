@@ -5,12 +5,14 @@
 	<title>{{ pageTitle || 'Document'}}</title>
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700|Source+Code+Pro">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	<link rel="stylesheet" href="components/prism/themes/prism-okaidia.css">
 	<link rel="stylesheet" href="components/flexy/flexy.min.css">
 	<link rel="stylesheet" href="dist/style.min.css">
 	<script src="dist/libs.min.js"></script>
 </head>
 <body>
 	<div ui-view></div>
+	<script src="components/prism/prism.js"></script>
 	<script src="dist/app.min.js"></script>
 </body>
 </html>
