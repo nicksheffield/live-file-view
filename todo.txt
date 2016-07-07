@@ -1,10 +1,11 @@
 # Todo
-
-- Tab system
 - Fix binary files being requested
 - Add resizable and rememberable sidebar
-- Try other themes from https://github.com/PrismJS/prism-themes
 - Make images display when previewed
+
+# Removed
+- Tab system
+- Try other themes from https://github.com/PrismJS/prism-themes
 - Turn into a node plugin
 
 # Done
