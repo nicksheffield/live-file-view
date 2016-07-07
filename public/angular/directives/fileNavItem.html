@@ -1,6 +1,6 @@
 <div class="file-nav-item">
 	
-	<span class="name" ng-class="{current: current.name == data.name, changed: changing.isChanged(data) || containsChanged()}">
+	<span class="name" ng-class="{current: current.path == data.path, changed: changing.isChanged(data) || containsChanged()}">
 		<span ng-show="data.type == 'directory'">
 			<span class="icon" ng-if="!opening.isOpen(data)"><i class="fa fa-folder"></i></span>
 			<span class="icon" ng-if="opening.isOpen(data)"><i class="fa fa-folder-open"></i></span>

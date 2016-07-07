@@ -26,18 +26,9 @@ watcher.on('change', function(path, info) {
 	var simplePath = path
 	var filename = simplePath.split('/')[simplePath.split('/').length-1]
 	
-	var ref = {
-		106752: 'new file',
-		131328: 'new folder',
-		67584: 'delete/move file',
-		133120: 'delete/move folder',
-		133376: 'delete/move folder (2)',
-		70656: 'modify file'
-	}
+	console.log(filename, chalk.yellow(info.flags), chalk.green(info.event))
 	
-	console.log(filename, chalk.yellow(info.flags), chalk.magenta(ref[info.flags]), chalk.green(info.event))
-	
-	if(info.flags == '70656' || info.event == 'modified') {
+	if(info.event == 'modified') {
 		io.emit('fschange', {path: simplePath})
 		return
 	}
@@ -51,9 +42,7 @@ watcher.on('change', function(path, info) {
 // ------------------------------------------------------------
 app.use(express.static(__dirname+'/public/'))
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // ------------------------------------------------------------
