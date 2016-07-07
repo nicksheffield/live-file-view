@@ -13,7 +13,7 @@ angular.module('app.services')
 		'scss': 'sass',
 		'sass': 'sass',
 		'less': 'less',
-		'json': 'json'
+		'json': 'javascript'
 	}
 
 	var service = function(filename) {

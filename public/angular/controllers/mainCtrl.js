@@ -70,7 +70,13 @@ angular.module('app.controllers')
 		$http.post('/api/get_file', {path: file.path})
 			.success(function(data) {
 				$scope.currentFile = file
-				$scope.fileContent = data
+				
+				if(typeof data == 'string') {
+					$scope.fileContent = data
+				} else {
+					$scope.fileContent = JSON.stringify(data, null, 4)
+				}
+				
 				$scope.syntax = $syntax(file.name)
 			})
 	}
