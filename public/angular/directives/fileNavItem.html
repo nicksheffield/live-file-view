@@ -1,0 +1,15 @@
+<div class="file-nav-item">
+
+	<span ng-show="data.type == 'directory'">
+		<span class="icon" ng-if="!open"><i class="fa fa-caret-right"></i></span>
+		<span class="icon" ng-if="open"><i class="fa fa-caret-down"></i></span>
+	</span>
+	<span class="name">{{ data.name }}</span>
+
+
+	<ul ng-show="data.type == 'directory' && open">
+		<li ng-repeat="file in data.files">
+			<file-nav-item data="file"></file-nav-item>
+		</li>
+	</ul>
+</div>

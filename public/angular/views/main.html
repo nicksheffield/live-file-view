@@ -1,0 +1,7 @@
+<h1>Folder viewer</h1>
+
+<ul class="file-nav">
+	<li ng-repeat="file in files" ng-class="{file: file.type == 'file', directory: file.type == 'directory'}">
+		<file-nav-item data="file"></file-nav-item>
+	</li>
+</ul>

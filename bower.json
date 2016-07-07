@@ -17,6 +17,11 @@
   ],
   "dependencies": {
     "flexy": "~0.0.8",
-    "jquery": "~3.0.0"
+    "jquery": "~3.0.0",
+    "angular": "~1.4.1",
+    "angular-resource": "~1.4.1",
+    "angular-sanitize": "~1.4.1",
+    "lodash": "~3.9.3",
+    "angular-ui-router": "~0.2.15"
   }
 }
