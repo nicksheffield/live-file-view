@@ -1,0 +1,93 @@
+.file-nav
+	padding 1em 0 0
+	margin 0
+	width 200px
+	min-width 250px
+	background navbg
+	font-size 0.8em
+	overflow scroll
+	font-family 'Helvetica Neue', Helvetica, Arial, sans-serif
+	
+	&, ul
+		list-style none
+	
+	ul
+		padding 0
+		
+	.directory .name
+		color directory
+		
+	.file .name
+		color file
+	
+	.name
+		display block
+		cursor pointer
+		padding 0.7em 0
+		border-left 2px solid transparent
+		white-space nowrap
+		height 35px
+		position relative
+		z-index 2
+		transition transition-speed
+		
+		i.fa
+			color icon-color
+			
+		&:before, &:after
+			position absolute
+			content ''
+			display block
+			top 0
+			right 100%
+			width 100px
+			height 35px
+			z-index -1
+			transition transition-speed
+		
+		&:after
+			right auto
+			left 100%
+		
+		&:hover
+			background mouseover
+			
+			i.fa
+				color icon-hover
+			
+			&:before, &:after
+				background mouseover
+		
+		&.current
+			// border-left-color highlight
+			color selected-file
+			background selected-bg
+			
+			i.fa
+				color icon-current
+			
+			&:before, &:after
+				background selected-bg
+		
+		&.changed
+			animation glow 1s infinite
+			color changed-color
+			background changed-bg
+		
+			i.fa
+				color changed-icon
+			
+			&:before, &:after
+				background changed-bg
+	
+	li
+		border-radius 3px
+		user-select none
+		padding-left 1.4em
+		position relative
+		
+		i.fa
+			margin-right 0.5em
+			display inline-block
+			width 0.5em
+			text-align center

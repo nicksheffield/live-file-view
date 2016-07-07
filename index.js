@@ -1,29 +1,66 @@
-var express = require('express')
-var app = express()
-var http = require('http').Server(app)
-var io = require('socket.io')(http)
-var watcher = require('fsevents')('./site')
-var fs = require('fs')
-var _ = require('lodash')
-var bodyParser = require('body-parser')
+// Alias
+// alias live="node ~/desktop/live-file-view"
 
+// ------------------------------------------------------------
+//   Dependencies
+// ------------------------------------------------------------
+var pwd         = process.env.PWD + '/'
+
+var _           = require('lodash')
+var fs          = require('fs')
+var express     = require('express')
+var app         = express()
+var http        = require('http').Server(app)
+var io          = require('socket.io')(http)
+var watcher     = require('fsevents')(pwd)
+var bodyParser  = require('body-parser')
+var chalk       = require('chalk')
+
+
+// ------------------------------------------------------------
+//   FS Events
+// ------------------------------------------------------------
 watcher.start()
 
 watcher.on('change', function(path, info) {
-	console.log('fschange', path)
-
-	var simplePath = '.' + path.replace(__dirname, '')
-	io.emit('fschange', {path: simplePath})
+	var simplePath = path
+	var filename = simplePath.split('/')[simplePath.split('/').length-1]
+	
+	var ref = {
+		106752: 'new file',
+		131328: 'new folder',
+		67584: 'delete/move file',
+		133120: 'delete/move folder',
+		133376: 'delete/move folder (2)',
+		70656: 'modify file'
+	}
+	
+	console.log(filename, chalk.yellow(info.flags), chalk.magenta(ref[info.flags]), chalk.green(info.event))
+	
+	if(info.flags == '70656' || info.event == 'modified') {
+		io.emit('fschange', {path: simplePath})
+		return
+	}
+	
+	io.emit('fsupdate')
 })
 
-app.use(express.static('./public/'))
+
+// ------------------------------------------------------------
+//   Middleware
+// ------------------------------------------------------------
+app.use(express.static(__dirname+'/public/'))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
 	extended: true
 }));
 
+
+// ------------------------------------------------------------
+//   Express API
+// ------------------------------------------------------------
 app.get('/api/files', function(req, res) {
-	var files = findFiles({path: './site/'})
+	var files = findFiles({path: pwd})
 	
 	res.send(files)
 })
@@ -32,6 +69,10 @@ app.post('/api/get_file', function(req, res) {
 	res.send(fs.readFileSync(req.body.path, 'utf-8'))
 })
 
+
+// ------------------------------------------------------------
+//   Recursive Datastructure for Dirs and Files
+// ------------------------------------------------------------
 function findFiles(folder) {
 	var paths = fs.readdirSync(folder.path)
 	var files = []
@@ -61,18 +102,50 @@ function findFiles(folder) {
 	})
 }
 
+
+// ------------------------------------------------------------
+//   Socket.IO
+// ------------------------------------------------------------
 io.on('connection', function(socket) {
-	console.log('a user connected', socket.id)
-
+	// console.log('a user connected', socket.id)
 	socket.emit('connected')
-
 })
 
+
+// ------------------------------------------------------------
+//   Start the Server
+// ------------------------------------------------------------
 http.listen(3000, function() {
-	console.log('\n\n\n\n\n\n\n\n\n')
-	console.log('File View')
-	console.log('Local:  http://localhost:3000')
-	console.log('Public: http://'+require('os').networkInterfaces().en0[1].address+':3000')
-	console.log('---------------------')
+	var ip = require('os').networkInterfaces().en0[1].address
+	var msg = '║        Live File Watcher'
+	var local = '║    local: '+chalk.blue('http://localhost:'+3000)
+	var pub = '║  ip: '+chalk.yellow('http://'+ip+':'+3000)
+	var max = _.max([msg.length, local.length, pub.length])
+
+	var dashes = repeat(max-10, '═')
+	
+	function rSpace(str, len) {
+		var amount = len - str.length;
+		var oStr = ''
+		for(var i=0; i<amount; i++){oStr += ' '}
+		return oStr
+	}
+	
+	function repeat(n, str) {
+		var oStr = ''
+		for(var i=0; i<n; i++) {
+			oStr += str
+		}
+		return oStr
+	}
+
 	console.log('')
+	console.log('╔' + dashes + '╗')
+	console.log('║' + repeat(max-10, ' ') + '║')
+	console.log(msg + rSpace(msg, max-10) + ' ║')
+	console.log('║' + repeat(max-10, ' ') + '║')
+	// console.log(local + rSpace(local, max) + ' ║')
+	console.log(pub + rSpace(pub, max) + ' ║')
+	console.log('║' + repeat(max-10, ' ') + '║')
+	console.log('╚' + dashes + '╝')
 })

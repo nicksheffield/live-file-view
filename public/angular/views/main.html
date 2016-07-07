@@ -9,7 +9,7 @@
 	<div layout="row" ratio="1">
 		<ul class="file-nav">
 			<li ng-repeat="file in files" ng-class="{file: file.type == 'file', directory: file.type == 'directory'}">
-				<file-nav-item data="file" choose="choose" current="currentFile" />
+				<file-nav-item data="file" choose="choose" current="currentFile" opening="openingFuncs" changing="changingFuncs" />
 			</li>
 		</ul>
 		
