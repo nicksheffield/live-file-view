@@ -129,6 +129,8 @@ http.listen(3000, function() {
 	}
 
 	console.log('')
+	console.log(chalk.bgBlue(' ' + pwd + ' '))
+	console.log('')
 	console.log('╔' + dashes + '╗')
 	console.log('║' + repeat(max-10, ' ') + '║')
 	console.log(msg + rSpace(msg, max-10) + ' ║')
