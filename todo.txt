@@ -1,6 +1,5 @@
 # Todo
 - Fix binary files being requested
-- Add resizable and rememberable sidebar
 - Make images display when previewed
 
 # Removed
@@ -10,3 +9,4 @@
 
 # Done
 - Add realtime fsevent updates
+- Add resizable and rememberable sidebar
