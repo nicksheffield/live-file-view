@@ -1,6 +1,5 @@
 # Todo
 - Fix binary files being requested
-- Add resizable and rememberable sidebar
 - Make images display when previewed
 - Take icons from https://github.com/DanBrooker/file-icons
 
@@ -11,3 +10,4 @@
 
 # Done
 - Add realtime fsevent updates
+- Add resizable and rememberable sidebar
