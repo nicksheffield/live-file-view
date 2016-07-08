@@ -2,6 +2,7 @@
 - Fix binary files being requested
 - Add resizable and rememberable sidebar
 - Make images display when previewed
+- Take icons from https://github.com/DanBrooker/file-icons
 
 # Removed
 - Tab system
