@@ -6,6 +6,8 @@ I created this so that my students could explore the files in any project we are
 
 To run it, you need to open the terminal, navigate to the folder you want to display, and run the node server.
 
+Note that you need to run `npm install` before it will work.
+
 To run the node server I generally set up an alias like this.
 
 ```
