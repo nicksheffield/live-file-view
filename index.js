@@ -60,6 +60,18 @@ app.post('/api/get_file', function(req, res) {
 
 
 // ------------------------------------------------------------
+//   Ignored folders and files
+// ------------------------------------------------------------
+var ignore = [
+	'.DS_Store',
+	'node_modules/',
+	'vendor/',
+	'.git/',
+	'sftp_config.json',
+]
+
+
+// ------------------------------------------------------------
 //   Recursive Datastructure for Dirs and Files
 // ------------------------------------------------------------
 function findFiles(folder) {
@@ -71,9 +83,7 @@ function findFiles(folder) {
 		var stat = fs.lstatSync(folder.path + path)
 		var name = path + (stat.isDirectory() ? '/' : '')
 		
-		if(name == 'node_modules/') return
-		if(stat.isDirectory() && name[0] == '.') return
-		if(name == '.DS_Store') return
+		if(ignore.indexOf(name) !== -1) return
 		
 		thing.type = stat.isFile() ? 'file' : 'directory'
 		thing.path = folder.path + name
@@ -96,7 +106,7 @@ function findFiles(folder) {
 //   Socket.IO
 // ------------------------------------------------------------
 io.on('connection', function(socket) {
-	// console.log('a user connected', socket.id)
+	console.log('A user connected', socket.id)
 	socket.emit('connected')
 })
 
@@ -105,10 +115,23 @@ io.on('connection', function(socket) {
 //   Start the Server
 // ------------------------------------------------------------
 http.listen(3000, function() {
-	var ip = require('os').networkInterfaces().en0[1].address
+	var ip = ''
+	var mode = ''
+	var adapter = require('os').networkInterfaces()
+	
+	if(adapter.en0) {
+		mode = 'Wifi'
+		ip = adapter.en0[1].address
+	}
+	
+	if(adapter.en5) {
+		mode = 'Ethernet'
+		ip = adapter.en5[1].address
+	}
+	
 	var msg = '║        Live File Watcher'
-	var local = '║    local: '+chalk.blue('http://localhost:'+3000)
-	var pub = '║  ip: '+chalk.blue('http://'+ip+':'+3000)
+	var local = '║    local: '+chalk.yellow('http://localhost:'+3000)
+	var pub = '║  ip: '+chalk.yellow('http://'+ip+':'+3000)
 	var max = _.max([msg.length, local.length, pub.length])
 
 	var dashes = repeat(max-10, '═')
@@ -129,7 +152,7 @@ http.listen(3000, function() {
 	}
 
 	console.log('')
-	console.log(' ' + pwd + ' ')
+	console.log(' ' + mode + ' ' + pwd + ' ')
 	console.log('')
 	console.log('╔' + dashes + '╗')
 	console.log('║' + repeat(max-10, ' ') + '║')
