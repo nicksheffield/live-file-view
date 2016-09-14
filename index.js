@@ -66,6 +66,7 @@ var ignore = [
 	'.DS_Store',
 	'node_modules/',
 	'vendor/',
+	'storage/',
 	'.git/',
 	'sftp_config.json',
 ]

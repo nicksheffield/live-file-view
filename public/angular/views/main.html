@@ -8,10 +8,28 @@
 		</ul>
 		
 		<div class="content" id="content" ratio="1" layout="col">
-			<pre ratio="1" ng-show="syntax" class="{{ syntax }} line-numbers"><code class="{{ syntax }}" ng-bind="fileContent"></code></pre>
+			<div ratio="1" layout="col" ng-show="syntax" class="code-panel">
+				<div class="tabs" layout="row">
+					<div class="tab" ng-repeat="file in openFiles" ng-click="choose(file, $event)" ng-class="{current: currentFile.path == file.path, changed: changingFuncs.isChanged(file)}" ratio="1" layout="row" align="center">
+						<span class="filename">
+							{{ file.name }}
+						</span>
+						
+						<button class="close-btn" ng-click="removeFromTab(file)">
+							<i class="fa fa-times-circle"></i>
+						</button>
+					</div>
+				</div>
+				<pre ratio="1" class="{{ syntax }} line-numbers"><code class="{{ syntax }}" ng-bind="fileContent"></code></pre>
+			</div>
 			
 			<div ng-show="!syntax" layout="col" justify="center" align="center" ratio="1" class="no-file-chosen">
-				Please choose a file
+				<rand>
+					<span>&lt; &gt;</span>
+					<span>{ }</span>
+					<span>[ ]</span>
+					<span>( )</span>
+				</rand>
 			</div>
 		</div>
 

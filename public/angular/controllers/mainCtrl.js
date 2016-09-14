@@ -9,6 +9,7 @@ angular.module('app.controllers')
 	$scope.files = {}
 	$scope.changed = []
 	$scope.opened = []
+	$scope.openFiles = []
 	
 	$scope.openingFuncs = {
 		isOpen: function(file) {
@@ -60,10 +61,31 @@ angular.module('app.controllers')
 	
 	load()
 	
-	$scope.choose = function(file) {
-		get(file)
-		// file.changed = false
-		$scope.changingFuncs.unchange(file)
+	$scope.choose = function(file, event) {
+		// handle middle click event
+		if(event && event.which == 2) {
+			$scope.removeFromTab(file)
+		} else {
+			get(file)
+			// file.changed = false
+			$scope.changingFuncs.unchange(file)
+			if(!_.find($scope.openFiles, {path: file.path})) {
+				$scope.openFiles.push(file)
+			}
+		}
+	}
+	
+	$scope.removeFromTab = function(file) {
+		$scope.openFiles = _.reject($scope.openFiles, {path: file.path})
+		
+		if($scope.currentFile.path == file.path) {
+			if($scope.openFiles.length) {
+				$scope.choose($scope.openFiles[0])
+			} else {
+				$scope.currentFile = {}
+				$scope.syntax = ''
+			}
+		}
 	}
 	
 	function get(file) {
