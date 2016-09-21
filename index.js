@@ -26,6 +26,11 @@ watcher.on('change', function(path, info) {
 	var simplePath = path
 	var filename = simplePath.split('/')[simplePath.split('/').length-1]
 	
+	if(sublimeProjectPattern.test(simplePath.replace(pwd, ''))) {
+		sublimeProject = JSON.parse(fs.readFileSync(path, "utf8"))
+		io.emit('fsupdate')
+	}
+	
 	console.log(filename, chalk.yellow(info.flags), chalk.green(info.event))
 	
 	if(info.event == 'modified') {
@@ -69,7 +74,7 @@ var defaultIgnore = [
 	'storage/',
 	'.git/',
 	'sftp_config.json',
-	'sublime.project-workspace'
+	'project.sublime-workspace'
 ]
 
 
@@ -77,6 +82,9 @@ var defaultIgnore = [
 //   Load sublime-project files
 // ------------------------------------------------------------
 var rootFiles = fs.readdirSync(pwd)
+
+var sublimeProjectPattern = /[a-zA-Z0-9\_\-]+.sublime-project/
+
 var sublimeProject = {
 	"folders": [
 		{
@@ -87,8 +95,6 @@ var sublimeProject = {
 }
 
 _.forEach(rootFiles, function(file) {
-	var sublimeProjectPattern = /[a-zA-Z0-9\_\-]+.sublime-project/
-	
 	if(sublimeProjectPattern.test(file)) {
 		sublimeProject = JSON.parse(fs.readFileSync(file, "utf8"))
 	}
@@ -136,12 +142,10 @@ function findFiles(folder) {
 			
 		if(thing.type == 'file') {
 			if(checkIfExcludedFile(thing.shortpath)) {
-				console.log('excluded file', thing.shortpath)
 				return
 			}
 		} else {
 			if(checkIfExcludedFolder(thing.shortpath)) {
-				console.log('excluded folder', thing.shortpath)
 				return
 			}
 		}
@@ -176,8 +180,6 @@ http.listen(3000, function() {
 	var ip = ''
 	var mode = ''
 	var adapter = require('os').networkInterfaces()
-
-	console.log(adapter)
 	
 	if(adapter.en0) {
 		ip = adapter.en0[1].address
