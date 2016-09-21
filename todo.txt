@@ -3,7 +3,6 @@
 - Make images display when previewed
 - Take icons from https://github.com/DanBrooker/file-icons
 - Turn into a node plugin
-- Read hidden files and folders from sublime project json
 
 # Removed
 - Try other themes from https://github.com/PrismJS/prism-themes
@@ -12,3 +11,4 @@
 - Add realtime fsevent updates
 - Add resizable and rememberable sidebar
 - Tab system
+- Read hidden files and folders from sublime project json
