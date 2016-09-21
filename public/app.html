@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Live File Viewer</title>
+	<style>
+		
+		* {
+			box-sizing: border-box;
+		}
+		
+		body {
+			font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+			text-align: center;
+			display: flex;
+			flex-direction: column;
+			height: 100vh;
+			align-items: center;
+			justify-content: center;
+		}
+		
+		h1 {
+			font-size: 1em;
+		}
+		
+		.ip {
+			font-size: 3em;
+		}
+		
+		.pwd {
+			color: tomato;
+		}
+		
+	</style>
+</head>
+<body>
+
+	<h1>Live File Viewer</h1>
+	<h2 class="ip"></h2>
+	<h3 class="pwd"></h3>
+	<p>Users Connected: <span class="count">0</span></p>
+	
+	<script>
+		require('../renderer.js')
+		
+		var ip = require('ip')
+		var $ = require('jquery')
+		var shell = require('electron').shell
+		
+		var pwd = process.env.PWD + '/'
+		
+		$('.ip')
+			.text(ip.address()+':3000')
+			.on('click', function() {
+				shell.openExternal('http://'+ip.address()+':3000')
+			})
+			
+		$('.pwd').text(pwd)
+		
+		var ipcRenderer = require('electron').ipcRenderer
+		
+		ipcRenderer.send('request-io-update')
+		
+		ipcRenderer.on('user-connection', function(event, data) {
+			$('.count').text(data.count)
+		})
+		
+	</script>
+</body>
+</html>

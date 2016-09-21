@@ -3,6 +3,7 @@
 - Make images display when previewed
 - Take icons from https://github.com/DanBrooker/file-icons
 - Turn into a node plugin
+- Turn into electron app
 
 # Removed
 - Try other themes from https://github.com/PrismJS/prism-themes
