@@ -60,16 +60,59 @@ app.post('/api/get_file', function(req, res) {
 
 
 // ------------------------------------------------------------
-//   Ignored folders and files
+//   Default ignored folders and files
 // ------------------------------------------------------------
-var ignore = [
+var defaultIgnore = [
 	'.DS_Store',
 	'node_modules/',
 	'vendor/',
 	'storage/',
 	'.git/',
 	'sftp_config.json',
+	'sublime.project-workspace'
 ]
+
+
+// ------------------------------------------------------------
+//   Load sublime-project files
+// ------------------------------------------------------------
+var rootFiles = fs.readdirSync(pwd)
+var sublimeProject = {
+	"folders": [
+		{
+			"folder_exclude_patterns": [],
+			"file_exclude_patterns": []
+		}
+	]
+}
+
+_.forEach(rootFiles, function(file) {
+	var sublimeProjectPattern = /[a-zA-Z0-9\_\-]+.sublime-project/
+	
+	if(sublimeProjectPattern.test(file)) {
+		sublimeProject = JSON.parse(fs.readFileSync(file, "utf8"))
+	}
+})
+
+function checkIfExcludedFolder(path) {
+	for(var i=0; i<sublimeProject.folders.length; i++) {
+		var projectFolder = sublimeProject.folders[i]
+		
+		if(_.indexOf(projectFolder.folder_exclude_patterns, path.substring(0, path.length-1)) !== -1) {
+			return true
+		}
+	}
+}
+
+function checkIfExcludedFile(path) {
+	for(var i=0; i<sublimeProject.folders.length; i++) {
+		var projectFolder = sublimeProject.folders[i]
+		
+		if(_.indexOf(projectFolder.file_exclude_patterns, path) !== -1) {
+			return true
+		}
+	}
+}
 
 
 // ------------------------------------------------------------
@@ -84,11 +127,24 @@ function findFiles(folder) {
 		var stat = fs.lstatSync(folder.path + path)
 		var name = path + (stat.isDirectory() ? '/' : '')
 		
-		if(ignore.indexOf(name) !== -1) return
-		
 		thing.type = stat.isFile() ? 'file' : 'directory'
 		thing.path = folder.path + name
 		thing.name = name
+		thing.shortpath = thing.path.replace(pwd, '')
+		
+		if(defaultIgnore.indexOf(name) !== -1) return
+			
+		if(thing.type == 'file') {
+			if(checkIfExcludedFile(thing.shortpath)) {
+				console.log('excluded file', thing.shortpath)
+				return
+			}
+		} else {
+			if(checkIfExcludedFolder(thing.shortpath)) {
+				console.log('excluded folder', thing.shortpath)
+				return
+			}
+		}
 		
 		if(thing.type == 'directory') {
 			thing.files = findFiles(thing)
@@ -109,6 +165,7 @@ function findFiles(folder) {
 io.on('connection', function(socket) {
 	console.log('A user connected', socket.id)
 	socket.emit('connected')
+	socket.emit('fsupdate')
 })
 
 

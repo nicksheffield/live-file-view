@@ -2,12 +2,13 @@
 - Fix binary files being requested
 - Make images display when previewed
 - Take icons from https://github.com/DanBrooker/file-icons
+- Turn into a node plugin
+- Read hidden files and folders from sublime project json
 
 # Removed
-- Tab system
 - Try other themes from https://github.com/PrismJS/prism-themes
-- Turn into a node plugin
 
 # Done
 - Add realtime fsevent updates
 - Add resizable and rememberable sidebar
+- Tab system
