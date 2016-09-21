@@ -1,7 +1,7 @@
 // ------------------------------------------------------------
 //   Dependencies
 // ------------------------------------------------------------
-var pwd         = process.env.PWD + '/'
+// var pwd         = process.env.PWD + '/'
 
 var _           = require('lodash')
 var fs          = require('fs')
@@ -29,9 +29,57 @@ var defaultIgnore = [
 
 
 // ------------------------------------------------------------
-//   Load sublime-project files
+//   Set Folder
 // ------------------------------------------------------------
-var rootFiles = fs.readdirSync(pwd)
+var mainFolder = ''
+
+
+function setFolder(folder) {
+	if(!folder || !folder[0]) return
+	
+	mainFolder = folder[0] + '/'
+	
+	console.log('mainFolder chosen:', mainFolder)
+	
+	io.emit('fsupdate')
+	
+	// ------------------------------------------------------------
+	//   Load sublime-project files
+	// ------------------------------------------------------------
+	var rootFiles = fs.readdirSync(mainFolder)
+
+	_.forEach(rootFiles, function(file) {
+		if(sublimeProjectPattern.test(file)) {
+			sublimeProject = JSON.parse(fs.readFileSync(mainFolder + file, "utf8"))
+		}
+	})
+
+
+	// ------------------------------------------------------------
+	//   FS Events
+	// ------------------------------------------------------------
+	var watcher = chokidar.watch(mainFolder, {ignored: defaultIgnore.map((str) => mainFolder+str), ignoreInitial: true})
+
+	watcher.on('all', (event, path) => {
+		// console.log('chokidar', event, path)
+		
+		var simplePath = path
+		var filename = simplePath.split('/')[simplePath.split('/').length-1]
+		
+		if(sublimeProjectPattern.test(simplePath.replace(mainFolder, ''))) {
+			sublimeProject = JSON.parse(fs.readFileSync(path, "utf8"))
+			io.emit('fsupdate')
+		}
+		
+		if(event == 'change') {
+			io.emit('fschange', {path: simplePath})
+			return
+		}
+		
+		io.emit('fsupdate')
+	});
+}
+
 
 var sublimeProjectPattern = /[a-zA-Z0-9\_\-]+.sublime-project/
 
@@ -44,11 +92,6 @@ var sublimeProject = {
 	]
 }
 
-_.forEach(rootFiles, function(file) {
-	if(sublimeProjectPattern.test(file)) {
-		sublimeProject = JSON.parse(fs.readFileSync(file, "utf8"))
-	}
-})
 
 function checkIfExcludedFolder(path) {
 	for(var i=0; i<sublimeProject.folders.length; i++) {
@@ -70,45 +113,25 @@ function checkIfExcludedFile(path) {
 	}
 }
 
-
-// ------------------------------------------------------------
-//   FS Events
-// ------------------------------------------------------------
-chokidar.watch(pwd, {ignored: defaultIgnore.map((str) => pwd+str), ignoreInitial: true}).on('all', (event, path) => {
-	console.log('chokidar', event, path);
-	
-	var simplePath = path
-	var filename = simplePath.split('/')[simplePath.split('/').length-1]
-	
-	if(sublimeProjectPattern.test(simplePath.replace(pwd, ''))) {
-		sublimeProject = JSON.parse(fs.readFileSync(path, "utf8"))
-		io.emit('fsupdate')
-	}
-	
-	if(event == 'change') {
-		io.emit('fschange', {path: simplePath})
-		return
-	}
-	
-	io.emit('fsupdate')
-});
-
-
 // ------------------------------------------------------------
 //   Middleware
 // ------------------------------------------------------------
-exapp.use(express.static(__dirname+'/public/'))
-exapp.use(bodyParser.json());
-exapp.use(bodyParser.urlencoded({ extended: true }));
+exapp.use(express.static(__dirname + '/public/'))
+exapp.use(bodyParser.json())
+exapp.use(bodyParser.urlencoded({ extended: true }))
 
 
 // ------------------------------------------------------------
 //   Express API
 // ------------------------------------------------------------
 exapp.get('/api/files', function(req, res) {
-	var files = findFiles({path: pwd})
-	
-	res.send(files)
+	if(mainFolder) {
+		var files = findFiles({path: mainFolder})
+		
+		res.send(files)
+	} else {
+		res.send([])
+	}
 })
 
 exapp.post('/api/get_file', function(req, res) {
@@ -131,7 +154,7 @@ function findFiles(folder) {
 		thing.type = stat.isFile() ? 'file' : 'directory'
 		thing.path = folder.path + name
 		thing.name = name
-		thing.shortpath = thing.path.replace(pwd, '')
+		thing.shortpath = thing.path.replace(mainFolder, '')
 		
 		if(defaultIgnore.indexOf(name) !== -1) return
 			
@@ -171,53 +194,7 @@ io.on('connection', function(socket) {
 // ------------------------------------------------------------
 //   Start the Server
 // ------------------------------------------------------------
-http.listen(3000, function() {
-	var ip = ''
-	var mode = ''
-	var adapter = require('os').networkInterfaces()
-	
-	if(adapter.en0) {
-		ip = adapter.en0[1].address
-	}
-	
-	if(adapter.en5) {
-		ip = adapter.en5[1].address
-	}
-	
-	var msg = '║        Live File Watcher'
-	var local = '║    local: '+chalk.yellow('http://localhost:'+3000)
-	var pub = '║  ip: '+chalk.yellow('http://'+ip+':'+3000)
-	var max = _.max([msg.length, local.length, pub.length])
-
-	var dashes = repeat(max-10, '═')
-	
-	function rSpace(str, len) {
-		var amount = len - str.length;
-		var oStr = ''
-		for(var i=0; i<amount; i++){oStr += ' '}
-		return oStr
-	}
-	
-	function repeat(n, str) {
-		var oStr = ''
-		for(var i=0; i<n; i++) {
-			oStr += str
-		}
-		return oStr
-	}
-
-	// console.log('')
-	// console.log(' ' + pwd + ' ')
-	// console.log('')
-	// console.log('╔' + dashes + '╗')
-	// console.log('║' + repeat(max-10, ' ') + '║')
-	// console.log(msg + rSpace(msg, max-10) + ' ║')
-	// console.log('║' + repeat(max-10, ' ') + '║')
-	// // console.log(local + rSpace(local, max) + ' ║')
-	// console.log(pub + rSpace(pub, max) + ' ║')
-	// console.log('║' + repeat(max-10, ' ') + '║')
-	// console.log('╚' + dashes + '╝')
-})
+http.listen(3000)
 
 
 // ------------------------------------------------------------
@@ -226,5 +203,6 @@ http.listen(3000, function() {
 
 module.exports = {
 	io: io,
-	server: http
+	server: http,
+	setFolder: setFolder
 }

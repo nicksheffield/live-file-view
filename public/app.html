@@ -3,68 +3,36 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Live File Viewer</title>
-	<style>
-		
-		* {
-			box-sizing: border-box;
-		}
-		
-		body {
-			font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-			text-align: center;
-			display: flex;
-			flex-direction: column;
-			height: 100vh;
-			align-items: center;
-			justify-content: center;
-		}
-		
-		h1 {
-			font-size: 1em;
-		}
-		
-		.ip {
-			font-size: 3em;
-		}
-		
-		.pwd {
-			color: tomato;
-		}
-		
-	</style>
+	<link rel="stylesheet" href="components/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="components/flexy/flexy.min.css">
+	<link rel="stylesheet" href="app.css">
 </head>
-<body>
-
-	<h1>Live File Viewer</h1>
-	<h2 class="ip"></h2>
-	<h3 class="pwd"></h3>
-	<p>Users Connected: <span class="count">0</span></p>
+<body layout="full-col">
+	<!-- <h3 class="directory">Dir: <span class="dir">Choose</span></h3> -->
 	
-	<script>
-		require('../renderer.js')
+	<div layout="row" class="header">
+		<div class="logo" ratio="1" layout="row" align="center">
+			<h1>Live File Viewer</h1>
+		</div>
+		<div class="users" layout="row" align="center" justify="center">
+			<i class="fa fa-eye"></i><span class="count"></span>
+		</div>
+	</div>
+	
+	<div ratio="1" layout="row" justify="center" align="center" class="main">
+		<h2 class="ip"></h2>
+	</div>
+	
+	<div class="footer" layout="row">
+		<div class="directory" ratio="1" layout="row" align="center">
+			<i class="fa fa-folder"></i><span class="dir"></span>
+		</div>
 		
-		var ip = require('ip')
-		var $ = require('jquery')
-		var shell = require('electron').shell
-		
-		var pwd = process.env.PWD + '/'
-		
-		$('.ip')
-			.text(ip.address()+':3000')
-			.on('click', function() {
-				shell.openExternal('http://'+ip.address()+':3000')
-			})
-			
-		$('.pwd').text(pwd)
-		
-		var ipcRenderer = require('electron').ipcRenderer
-		
-		ipcRenderer.send('request-io-update')
-		
-		ipcRenderer.on('user-connection', function(event, data) {
-			$('.count').text(data.count)
-		})
-		
-	</script>
+		<div class="choose">
+			<button class="choose-btn"><i class="fa fa-folder-open-o"></i></button>
+		</div>
+	</div>
+	
+	<script src="../renderer.js"></script>
 </body>
 </html>
