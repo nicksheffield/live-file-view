@@ -176,14 +176,14 @@ http.listen(3000, function() {
 	var ip = ''
 	var mode = ''
 	var adapter = require('os').networkInterfaces()
+
+	console.log(adapter)
 	
 	if(adapter.en0) {
-		mode = 'Wifi'
 		ip = adapter.en0[1].address
 	}
 	
 	if(adapter.en5) {
-		mode = 'Ethernet'
 		ip = adapter.en5[1].address
 	}
 	
@@ -210,7 +210,7 @@ http.listen(3000, function() {
 	}
 
 	console.log('')
-	console.log(' ' + mode + ' ' + pwd + ' ')
+	console.log(' ' + pwd + ' ')
 	console.log('')
 	console.log('╔' + dashes + '╗')
 	console.log('║' + repeat(max-10, ' ') + '║')
