@@ -2,14 +2,12 @@
 - Fix binary files being requested
 - Make images display when previewed
 - Take icons from https://github.com/DanBrooker/file-icons
-- Turn into a node plugin
-- Turn into electron app
-
-# Removed
-- Try other themes from https://github.com/PrismJS/prism-themes
+- Fix sublime-project file being kept loaded even after changing folders
+- Fix sublime-project causing errors when empty or when deleted
 
 # Done
 - Add realtime fsevent updates
 - Add resizable and rememberable sidebar
 - Tab system
 - Read hidden files and folders from sublime project json
+- Turn into electron app
