@@ -6,7 +6,7 @@
   "scripts": {
     "install": "bower install",
     "start": "electron .",
-    "build": "electron-packager . 'Live File Viewer' --overwrite && cp icon.icns 'Live File Viewer-darwin-x64/Live File Viewer.app/Contents/Resources/electron.icns'"
+    "build": "electron-packager . 'live-file-view' --overwrite && cp build/icon.icns 'live-file-view-darwin-x64/live-file-view.app/Contents/Resources/electron.icns'"
   },
   "keywords": [],
   "author": "Nick Sheffield <numbereft@gmail.com> (http://nicksheffield.me/)",

@@ -1,5 +1,5 @@
 var electron      = require('electron')
-var mainApp       = require('./app')
+var mainApp       = require('./live-file-view')
 
 var app           = electron.app
 var dialog        = electron.dialog
@@ -10,7 +10,7 @@ var mainWindow
 
 app.on('ready', function () {
 	mainWindow = new BrowserWindow({width: 800, height: 600})
-	mainWindow.loadURL(`file://${__dirname}/public/app.html`)
+	mainWindow.loadURL(`file://${__dirname}/app/app.html`)
 	mainWindow.on('closed', function () {
 		mainWindow = null
 	})
