@@ -1,11 +1,15 @@
-var ip = require('ip')
+// var ip = require('ip')
 var $ = require('jquery')
 var shell = require('electron').shell
+var adapter = require('os').networkInterfaces()
+
+if(adapter.en5) ip = adapter.en5[1].address
+if(adapter.en0) ip = adapter.en0[1].address
 
 $('.ip')
-	.text(ip.address()+':3000')
+	.text(ip + ':3000')
 	.on('click', function() {
-		shell.openExternal('http://'+ip.address()+':3000')
+		shell.openExternal('http://' + ip + ':3000')
 	})
 	
 var ipcRenderer = require('electron').ipcRenderer
