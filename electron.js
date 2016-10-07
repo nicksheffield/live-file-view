@@ -70,6 +70,8 @@ function setFolder(event, path) {
 	mainApp.setFolder(path)
 	
 	var data = db.getState()
-	data.folders = _.reject(data.folders, (folder) => folder == path[0]).push(path[0])
+	data.folders = _.reject(data.folders, (folder) => folder == path[0])
+	
+	data.folders.push(path[0])
 	db.value()
 }

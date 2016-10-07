@@ -13,7 +13,10 @@ var chokidar    = require('chokidar')
 var bodyParser  = require('body-parser')
 var chalk       = require('chalk')
 
-var fileServer = {}
+var fileApp = express()
+var fileServer = require('http').Server(fileApp)
+
+fileServer.listen(3333)
 
 
 // ------------------------------------------------------------
@@ -48,13 +51,14 @@ function setFolder(folder) {
 	// ------------------------------------------------------------
 	//   Set Express Static Middleware
 	// ------------------------------------------------------------
-	if(fileServer.close) fileServer.close()
 	
-	var fileApp = express()
-	fileServer = require('http').Server(fileApp)
+	if(fileApp._router) {
+		fileApp._router.stack = _.filter(fileApp._router.stack, function(middleware) {
+			return middleware.name !== 'serveStatic'
+		})
+	}
+	
 	fileApp.use(express.static(mainFolder))
-	fileServer.listen(3333)
-	
 
 	// ------------------------------------------------------------
 	//   Load sublime-project files
