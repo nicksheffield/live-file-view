@@ -62,6 +62,7 @@ angular.module('app.controllers')
 	load()
 	
 	$scope.choose = function(file, event) {
+		console.log('choose')
 		// handle middle click event
 		if(event && event.which == 2) {
 			$scope.removeFromTab(file)
@@ -71,6 +72,7 @@ angular.module('app.controllers')
 			$scope.changingFuncs.unchange(file)
 			if(!_.find($scope.openFiles, {path: file.path})) {
 				$scope.openFiles.push(file)
+				console.log('tabs', $scope.openFiles)
 			}
 		}
 	}
@@ -89,17 +91,29 @@ angular.module('app.controllers')
 	}
 	
 	function get(file) {
+		var split = file.name.split('.')
+		
 		$http.post('/api/get_file', {path: file.path})
 			.success(function(data) {
-				$scope.currentFile = file
-				
-				if(typeof data == 'string') {
-					$scope.fileContent = data
+				if(split[split.length-1] == 'jpg' ||
+				   split[split.length-1] == 'gif' ||
+				   split[split.length-1] == 'png' ||
+				   split[split.length-1] == 'svg')
+				{
+					file.imageurl = 'http://localhost:3333/' + file.shortpath.replace(/\s/g, '%20')
+					$scope.currentFile = file
+					$scope.syntax = ''
 				} else {
-					$scope.fileContent = JSON.stringify(data, null, 4)
+					$scope.currentFile = file
+					
+					if(typeof data == 'string') {
+						$scope.fileContent = data
+					} else {
+						$scope.fileContent = JSON.stringify(data, null, 4)
+					}
+					
+					$scope.syntax = $syntax(file.name)
 				}
-				
-				$scope.syntax = $syntax(file.name)
 			})
 	}
 	
