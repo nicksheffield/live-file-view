@@ -1,5 +1,6 @@
 var electron      = require('electron')
 var low           = require('lowdb')
+var _             = require('lodash')
 var mkdirp        = require('mkdirp')
 var mainApp       = require('./live-file-view')
 var fs            = require('fs')
@@ -68,15 +69,7 @@ function setFolder(event, path) {
 	event.sender.send('selected-directory', path)
 	mainApp.setFolder(path)
 	
-	// console.log('folders', db.get('folders'))
-	// db.get('folders')
-	// 	.push(path[0])
-	// 	.value()
-	
 	var data = db.getState()
-	
-	if(data.folders.indexOf(path[0]) == -1) {
-		data.folders.push(path[0])
-		db.value()
-	}
+	data.folders = _.reject(data.folders, (folder) => folder == path[0]).push(path[0])
+	db.value()
 }
