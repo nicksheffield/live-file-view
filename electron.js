@@ -66,12 +66,14 @@ ipcMain.on('drop-folder', function(event, path) {
 })
 
 function setFolder(event, path) {
-	event.sender.send('selected-directory', path)
-	mainApp.setFolder(path)
-	
-	var data = db.getState()
-	data.folders = _.reject(data.folders, (folder) => folder == path[0])
-	
-	data.folders.push(path[0])
-	db.value()
+	if(mainApp.setFolder(path)) {
+		
+		event.sender.send('selected-directory', path)
+		
+		var data = db.getState()
+		data.folders = _.reject(data.folders, (folder) => folder == path[0])
+		
+		data.folders.push(path[0])
+		db.value()
+	}
 }

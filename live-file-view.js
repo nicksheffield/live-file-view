@@ -40,8 +40,12 @@ var mainFolder = ''
 
 
 function setFolder(folder) {
-	if(!folder || !folder[0]) return
-	
+	if(!folder || !folder[0]) return false
+
+	var stat = fs.lstatSync(folder[0])
+
+	if(!stat.isDirectory()) return false
+		
 	mainFolder = folder[0] + '/'
 	
 	console.log('mainFolder chosen:', mainFolder)
@@ -59,6 +63,7 @@ function setFolder(folder) {
 	}
 	
 	fileApp.use(express.static(mainFolder))
+	
 
 	// ------------------------------------------------------------
 	//   Load sublime-project files
@@ -95,6 +100,8 @@ function setFolder(folder) {
 		
 		io.emit('fsupdate')
 	});
+	
+	return true
 }
 
 
