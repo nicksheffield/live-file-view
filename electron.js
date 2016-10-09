@@ -1,3 +1,6 @@
+// ------------------------------------------------------------
+//   Dependencies
+// ------------------------------------------------------------
 var electron      = require('electron')
 var low           = require('lowdb')
 var _             = require('lodash')
@@ -5,6 +8,10 @@ var mkdirp        = require('mkdirp')
 var mainApp       = require('./live-file-view')
 var fs            = require('fs')
 
+
+// ------------------------------------------------------------
+//   Electron Libs
+// ------------------------------------------------------------
 var app           = electron.app
 var dialog        = electron.dialog
 var ipcMain       = electron.ipcMain
@@ -12,16 +19,21 @@ var BrowserWindow = electron.BrowserWindow
 
 var mainWindow
 
+
+// ------------------------------------------------------------
+//   Data Directory and Lowdb
+// ------------------------------------------------------------
 var dataDir = app.getPath('appData') + '/live-file-view'
-
-if(!fs.readdirSync(dataDir)) {
-	mkdirp(dataDir)
-}
-
+if(!fs.readdirSync(dataDir)) mkdirp(dataDir)
 var db = low(dataDir + '/db.json')
-
 db.defaults({ folders: [] }).value()
 
+console.log('dataDir', dataDir)
+
+
+// ------------------------------------------------------------
+//   Main Application Processes
+// ------------------------------------------------------------
 app.on('ready', function () {
 	mainWindow = new BrowserWindow({width: 800, height: 600})
 	mainWindow.loadURL(`file://${__dirname}/app/app.html`)
@@ -33,6 +45,11 @@ app.on('ready', function () {
 app.on('window-all-closed', function () {
 	app.quit()
 })
+
+
+// ------------------------------------------------------------
+//   Sockets
+// ------------------------------------------------------------
 
 mainApp.io.on('connection', function(socket) {
 	mainWindow.webContents.send('user-connection', {
@@ -47,6 +64,11 @@ mainApp.io.on('connection', function(socket) {
 		})
 	})
 })
+
+
+// ------------------------------------------------------------
+//   IPC Events
+// ------------------------------------------------------------
 
 ipcMain.on('request-io-update', function(event) {
 	event.sender.send('user-connection', {
