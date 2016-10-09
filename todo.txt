@@ -1,6 +1,5 @@
 # Todo
 - Fix binary files being requested
-- Make images display when previewed
 - Take icons from https://github.com/DanBrooker/file-icons
 - Fix sublime-project file being kept loaded even after changing folders
 - Fix sublime-project causing errors when empty or when deleted
@@ -11,3 +10,4 @@
 - Tab system
 - Read hidden files and folders from sublime project json
 - Turn into electron app
+- Make images display when previewed
