@@ -9,7 +9,7 @@
 		
 		<div class="content" id="content" ratio="1" layout="col">
 			<div ratio="1" layout="col" class="code-panel">
-				<div class="tabs">
+				<div class="tabs" layout="row">
 					<div class="tab" ng-repeat="file in openFiles" ng-click="choose(file, $event)" ng-class="{current: currentFile.path == file.path, changed: changingFuncs.isChanged(file)}" ratio="1" layout="row" align="center">
 						<span class="filename">
 							{{ file.name }}
@@ -20,7 +20,7 @@
 						</button>
 					</div>
 				</div>
-				<div ng-show="syntax && !currentFile.imageurl">
+				<div ng-show="syntax && !currentFile.imageurl" ratio="1">
 					<pre ratio="1" class="{{ syntax }} line-numbers"><code class="{{ syntax }}" ng-bind="fileContent"></code></pre>
 				</div>
 				

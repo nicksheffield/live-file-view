@@ -151,6 +151,16 @@ exapp.get('/api/files', function(req, res) {
 	if(mainFolder) {
 		var files = findFiles({path: mainFolder})
 		
+		files = [
+			{
+				type: 'directory',
+				path: mainFolder,
+				name: mainFolder.split('/')[mainFolder.split('/').length-2] + '/',
+				shortpath: '/',
+				files: files
+			}
+		]
+		
 		res.send(files)
 	} else {
 		res.send([])

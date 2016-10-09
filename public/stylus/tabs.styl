@@ -2,11 +2,8 @@
 	background navbg
 	font-family 'Helvetica Neue', Helvetica, Arial, sans-serif
 	font-weight bold
-
 	user-select none
-	// overflow-x auto
-	// white-space nowrap
-	display flex
+	min-height 50px
 	
 	.tab
 		max-width 30%
@@ -20,11 +17,14 @@
 		color rgba(255, 255, 255, 0.5)
 		position relative
 		white-space nowrap
-		display inline-block
 		border-bottom 2px solid rgba(0, 0, 0, 0)
+		transition background 0.2s
+		
+		&:last-child
+			box-shadow none
 		
 		&:hover
-			background lighten(navbg, 10%)
+			background lighten(navbg, 5%)
 			
 		&.current
 			color #fff

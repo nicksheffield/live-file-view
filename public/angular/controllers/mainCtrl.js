@@ -56,6 +56,8 @@ angular.module('app.controllers')
 		$http.get('/api/files')
 			.success(function(data) {
 				$scope.files = data
+				
+				$scope.openingFuncs.open($scope.files[0])
 			})
 	}
 	
@@ -97,10 +99,9 @@ angular.module('app.controllers')
 			.success(function(data) {
 				if(split[split.length-1] == 'jpg' ||
 				   split[split.length-1] == 'gif' ||
-				   split[split.length-1] == 'png' ||
-				   split[split.length-1] == 'svg')
+				   split[split.length-1] == 'png')
 				{
-					file.imageurl = 'http://localhost:3333/' + file.shortpath.replace(/\s/g, '%20')
+					file.imageurl = 'http://' + location.hostname + ':3333/' + file.shortpath.replace(/\s/g, '%20')
 					$scope.currentFile = file
 					$scope.syntax = ''
 				} else {
