@@ -77,3 +77,7 @@ function setFolder(event, path) {
 		db.value()
 	}
 }
+
+ipcMain.on('get-folders', function(event) {
+	event.sender.send('list-folders', db.getState().folders)
+})

@@ -15,9 +15,20 @@ $('.ip')
 var ipcRenderer = require('electron').ipcRenderer
 
 ipcRenderer.send('request-io-update')
+ipcRenderer.send('get-folders')
 
 ipcRenderer.on('user-connection', function(event, data) {
 	$('.count').text(data.count)
+})
+
+ipcRenderer.on('list-folders', function(event, folders) {
+	folders = folders.reverse()
+	
+	$('.folders').empty()
+	
+	folders.forEach(function(folder) {
+		$('.folders').append('<option value="'+folder+'">'+folder+'</option>')
+	})
 })
 
 $('.choose-btn').on('click', function() {
@@ -28,6 +39,8 @@ ipcRenderer.on('selected-directory', function (event, path) {
 	if(path) {
 		$('.dir').text(path)
 	}
+	
+	ipcRenderer.send('get-folders')
 })
 
 document.ondragover = document.ondrop = (ev) => {

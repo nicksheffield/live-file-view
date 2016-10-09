@@ -16,7 +16,6 @@ var chalk       = require('chalk')
 var fileApp = express()
 var fileServer = require('http').Server(fileApp)
 
-fileServer.listen(3333)
 
 
 // ------------------------------------------------------------
@@ -219,6 +218,7 @@ io.on('connection', function(socket) {
 //   Start the Server
 // ------------------------------------------------------------
 http.listen(3000)
+fileServer.listen(3333)
 
 
 // ------------------------------------------------------------

@@ -9,14 +9,14 @@
 		
 		<div class="content" id="content" ratio="1" layout="col">
 			<div ratio="1" layout="col" class="code-panel">
-				<div class="tabs" layout="row">
+				<div class="tabs">
 					<div class="tab" ng-repeat="file in openFiles" ng-click="choose(file, $event)" ng-class="{current: currentFile.path == file.path, changed: changingFuncs.isChanged(file)}" ratio="1" layout="row" align="center">
 						<span class="filename">
 							{{ file.name }}
 						</span>
 						
 						<button class="close-btn" ng-click="removeFromTab(file)">
-							<i class="fa fa-times-circle"></i>
+							<i class="fa fa-times"></i>
 						</button>
 					</div>
 				</div>
