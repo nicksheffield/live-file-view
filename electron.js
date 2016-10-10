@@ -24,7 +24,7 @@ var mainWindow
 //   Data Directory and Lowdb
 // ------------------------------------------------------------
 var dataDir = app.getPath('appData') + '/live-file-view'
-if(!fs.readdirSync(dataDir)) mkdirp(dataDir)
+if(!fs.existsSync(dataDir)) mkdirp(dataDir)
 var db = low(dataDir + '/db.json')
 db.defaults({ folders: [] }).value()
 
